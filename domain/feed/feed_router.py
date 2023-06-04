@@ -14,10 +14,15 @@ router = APIRouter(
 
 
 @router.get("/list", response_model=feed_schema.FeedList)
-def feed_list(db: Session = Depends(get_db),
+def feed_list(weather: str, temperature: str,
+              city: str, district: str,
+              db: Session = Depends(get_db),
               page: int = 0, size: int = 10):
     total, _feed_list = feed_crud.get_feed_list(
-        db, skip=page * size, limit=size
+        db,
+        weather=weather, temperature=temperature,
+        city=city, district=district,
+        skip=page * size, limit=size
     )
     return {
         'total': total,
