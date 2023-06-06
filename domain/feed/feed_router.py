@@ -67,6 +67,19 @@ def feed_delete(_feed_delete: feed_schema.FeedDelete,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="삭제 권한이 없습니다.")
     feed_crud.delete_feed(db, db_feed=db_feed)
+
+
+@router.post("/like", status_code=status.HTTP_204_NO_CONTENT)
+def feed_like(_feed_like: feed_schema.FeedLike,
+              db: Session = Depends(get_db),
+              current_user: User = Depends(get_current_user)):
+    db_feed = get_feed(db, feed_id=_feed_like.feed_id)
+    if not current_user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="게시글 좋아요 권한이 없습니다.")
+    feed_crud.like_feed(db, db_feed=db_feed, db_user=current_user)
+
+
 def get_feed(db: Session, feed_id: int):
     db_feed = feed_crud.get_feed(db, feed_id=feed_id)
     if not db_feed:

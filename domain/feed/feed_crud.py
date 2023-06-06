@@ -69,4 +69,8 @@ def update_feed(db: Session, db_feed: Feed,
 def delete_feed(db: Session, db_feed: Feed):
     db.delete(db_feed)
     db.commit()
+
+
+def like_feed(db: Session, db_feed: Feed, db_user: User):
+    db_feed.liker.append(db_user)
     db.commit()
