@@ -20,7 +20,9 @@ class FeedDetail(BaseModel):
     city: str
     district: str
     user: User
-    feed_liker: list[User] = []
+    liker: list[User] = []
+    product_links: list[ProductLink] = []
+    comments: list[Comment] = []
 
     class Config:
         orm_mode = True
