@@ -76,3 +76,25 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         if user is None:
             raise credentials_exception
         return user
+
+
+@router.get("/me", response_model=user_schema.User)
+def get_user_info(token: str = Depends(oauth2_scheme),
+                  db: Session = Depends(get_db)):
+    return get_current_user(token, db)
+
+
+@router.put("/me/password", status_code=status.HTTP_204_NO_CONTENT)
+def update_user_password(_user_update_password: user_schema.UserUpdatePassword,
+                         token: str = Depends(oauth2_scheme),
+                         db: Session = Depends(get_db)):
+    user = get_current_user(token, db)
+    user_crud.update_user_password(db, user=user, user_update_password=_user_update_password)
+
+
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(_user_delete: user_schema.UserDelete,
+                token: str = Depends(oauth2_scheme),
+                db: Session = Depends(get_db)):
+    user = get_current_user(token, db)
+    user_crud.delete_user(db, db_user=user)
