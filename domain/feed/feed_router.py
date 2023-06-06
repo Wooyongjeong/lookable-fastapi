@@ -32,7 +32,7 @@ def feed_list(weather: str, temperature: str,
 
 @router.get("/detail/{feed_id}", response_model=feed_schema.FeedDetail)
 def feed_detail(feed_id: int, db: Session = Depends(get_db)):
-    return feed_crud.get_feed(db, feed_id=feed_id)
+    return get_feed(db, feed_id=feed_id)
 
 
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
@@ -51,3 +51,9 @@ def feed_update(_feed_update: feed_schema.FeedUpdate,
                 db: Session = Depends(get_db),
                 current_user: User = Depends(get_current_user)):
     feed_crud.update_feed(db, feed_update=_feed_update, user=current_user)
+def get_feed(db: Session, feed_id: int):
+    db_feed = feed_crud.get_feed(db, feed_id=feed_id)
+    if not db_feed:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="해당 게시글을 찾을 수 없습니다.")
+    return db_feed

@@ -4,6 +4,7 @@ from pydantic import BaseModel, validator
 
 from domain.product_link.product_link_schema \
     import ProductLinkCreate
+    import ProductLinkCreate, ProductLink
 from domain.user.user_schema import User
 
 
@@ -51,6 +52,7 @@ class Feed(BaseModel):
     modify_date: datetime.datetime | None = None
     user: User
     feed_liker: list[User] = []
+    product_links: list[ProductLink] = []
 
     class Config:
         orm_mode = True

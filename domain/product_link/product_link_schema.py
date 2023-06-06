@@ -4,9 +4,9 @@ from pydantic import BaseModel, validator
 
 
 class ProductLink(BaseModel):
+    id: int
     name: str
-    link: str
-    feed_id: int
+    url: str
 
     class Config:
         orm_mode = True
@@ -14,9 +14,9 @@ class ProductLink(BaseModel):
 
 class ProductLinkCreate(BaseModel):
     name: str
-    link: str
+    url: str
 
-    @validator('name', 'link')
+    @validator('name', 'url')
     def not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')

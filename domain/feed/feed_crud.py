@@ -2,11 +2,23 @@ from datetime import datetime
 
 from domain.feed.feed_schema import FeedCreate
 from models import Feed, User
+from domain.product_link import product_link_crud
 from sqlalchemy.orm import Session
 
 
-def get_feed_list(db: Session, skip: int = 0, limit: int = 10):
+def get_feed_list(db: Session,
+                  weather: str, temperature: str,
+                  city: str, district: str,
+                  skip: int = 0, limit: int = 10):
     _feed_list = db.query(Feed)\
+        .join(ProductLink)\
+        .join(Comment)\
+        .filter(
+            (Feed.weather == weather) &
+            (Feed.temperature == temperature) &
+            (Feed.city == city) &
+            (Feed.district == district)
+        )\
         .order_by(Feed.create_date.desc())
 
     total = _feed_list.count()
@@ -15,7 +27,9 @@ def get_feed_list(db: Session, skip: int = 0, limit: int = 10):
 
 
 def get_feed(db: Session, feed_id: int):
-    return db.query(Feed).get(feed_id)
+    return db.query(Feed)\
+        .filter(Feed.id == feed_id)\
+        .first()
 
 
 def create_feed(db: Session, feed_create: FeedCreate, user: User):
