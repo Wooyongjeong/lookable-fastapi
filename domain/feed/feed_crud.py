@@ -2,6 +2,7 @@ from datetime import datetime
 
 from domain.product_link import product_link_crud
 from domain.feed.feed_schema import FeedCreate, FeedUpdate
+from models import Feed, User, ProductLink, Comment
 from sqlalchemy.orm import Session
 
 
@@ -62,5 +63,10 @@ def update_feed(db: Session, db_feed: Feed,
     db_feed.modify_date = datetime.now()
 
     db.add(db_feed)
+    db.commit()
+
+
+def delete_feed(db: Session, db_feed: Feed):
+    db.delete(db_feed)
     db.commit()
     db.commit()

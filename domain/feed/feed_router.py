@@ -56,6 +56,17 @@ def feed_update(_feed_update: feed_schema.FeedUpdate,
                             detail="수정 권한이 없습니다.")
     feed_crud.update_feed(db, db_feed=db_feed,
                           feed_update=_feed_update)
+
+
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+def feed_delete(_feed_delete: feed_schema.FeedDelete,
+                db: Session = Depends(get_db),
+                current_user: User = Depends(get_current_user)):
+    db_feed = get_feed(db, feed_id=_feed_delete.feed_id)
+    if db_feed.user.id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="삭제 권한이 없습니다.")
+    feed_crud.delete_feed(db, db_feed=db_feed)
 def get_feed(db: Session, feed_id: int):
     db_feed = feed_crud.get_feed(db, feed_id=feed_id)
     if not db_feed:

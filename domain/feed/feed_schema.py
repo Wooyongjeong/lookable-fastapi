@@ -2,6 +2,7 @@ import datetime
 
 from pydantic import BaseModel, validator
 
+from domain.comment.comment_schema import Comment
 from domain.product_link.product_link_schema \
     import ProductLinkCreate, ProductLink
 from domain.user.user_schema import User

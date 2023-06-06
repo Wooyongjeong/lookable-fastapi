@@ -20,3 +20,17 @@ def create_product_links(db: Session,
                                       feed=feed,
                                       create_date=datetime.now())
         db.add(db_product_link)
+
+
+def update_feed_product_links(db: Session,
+                              product_links: list[product_link_schema.ProductLink]):
+    updated_product_links = []
+    for product_link in product_links:
+        db_product_link = db.query(ProductLink)\
+            .get(product_link.id)
+        db_product_link.name = product_link.name
+        db_product_link.url = product_link.url
+        db_product_link.modify_date = datetime.now()
+        db.add(db_product_link)
+        updated_product_links.append(db_product_link)
+    return updated_product_links
