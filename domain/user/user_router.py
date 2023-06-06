@@ -5,7 +5,6 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import Session
 from starlette import status
 
 from database import get_db
