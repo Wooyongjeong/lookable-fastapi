@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from domain.feed.feed_schema import FeedCreate
-from models import Feed, User
 from domain.product_link import product_link_crud
+from domain.feed.feed_schema import FeedCreate, FeedUpdate
 from sqlalchemy.orm import Session
 
 
@@ -46,5 +45,22 @@ def create_feed(db: Session, feed_create: FeedCreate, user: User):
     product_link_crud.create_product_links(db,
                                            product_link_creates=feed_create.product_links,
                                            feed=db_feed)
+    db.commit()
+
+
+def update_feed(db: Session, db_feed: Feed,
+                feed_update: FeedUpdate):
+    db_feed.img = feed_update.img
+    db_feed.content = feed_update.content
+    db_feed.weather = feed_update.weather
+    db_feed.temperature = feed_update.temperature
+    db_feed.sensitivity = feed_update.sensitivity
+    db_feed.city = feed_update.city
+    db_feed.district = feed_update.district
+    db_feed.product_links = product_link_crud.update_feed_product_links(db,
+                                                                        product_links=feed_update.product_links)
+    db_feed.modify_date = datetime.now()
+
+    db.add(db_feed)
     db.commit()
     db.commit()

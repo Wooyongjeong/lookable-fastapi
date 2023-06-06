@@ -3,7 +3,6 @@ import datetime
 from pydantic import BaseModel, validator
 
 from domain.product_link.product_link_schema \
-    import ProductLinkCreate
     import ProductLinkCreate, ProductLink
 from domain.user.user_schema import User
 
@@ -65,8 +64,16 @@ class FeedList(BaseModel):
     feed_list: list[Feed] = []
 
 
-class FeedUpdate(FeedCreate):
+class FeedUpdate(BaseModel):
     feed_id: int
+    img: str | None = None
+    content: str
+    weather: str
+    temperature: str
+    sensitivity: str
+    city: str
+    district: str
+    product_links: list[ProductLink] = []
 
 
 class FeedDelete(BaseModel):
