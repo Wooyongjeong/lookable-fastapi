@@ -43,5 +43,8 @@ def create_feed(db: Session, feed_create: FeedCreate, user: User):
                    user=user,
                    create_date=datetime.now())
     db.add(db_feed)
+    product_link_crud.create_product_links(db,
+                                           product_link_creates=feed_create.product_links,
+                                           feed=db_feed)
     db.commit()
-    return db_feed
+    db.commit()

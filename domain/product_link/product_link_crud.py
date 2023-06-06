@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from domain.product_link.product_link_schema \
-    import ProductLinkCreate
+from domain.product_link import product_link_schema
 from models import ProductLink, Feed
 from sqlalchemy.orm import Session
 
@@ -13,12 +12,11 @@ def get_product_link_list(db: Session, feed_id: int):
 
 
 def create_product_links(db: Session,
-                         product_link_creates: list[ProductLinkCreate],
+                         product_link_creates: list[product_link_schema.ProductLinkCreate],
                          feed: Feed):
     for product_link_create in product_link_creates:
         db_product_link = ProductLink(name=product_link_create.name,
-                                      link=product_link_create.link,
+                                      url=product_link_create.url,
                                       feed=feed,
-                                      created_date=datetime.now())
+                                      create_date=datetime.now())
         db.add(db_product_link)
-    db.commit()
